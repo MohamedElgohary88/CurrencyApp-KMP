@@ -16,11 +16,11 @@ junit = "4.13.2"
 kotlin = "2.0.21"
 
 ktor = "2.3.9"
-date-time = "0.5.0"
+date-time = "0.6.0"
 multiplatformSettings = "1.1.1"
 voyager = "1.0.0"
 koinCore = "3.5.3"
-realm = "1.13.0"
+realm = "2.3.0"
 coroutines = "1.8.0"
 statelyCommon = "2.0.5"
 
@@ -67,6 +67,7 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 # Kotlin Serialization
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 realm-plugin = { id = "io.realm.kotlin", version.ref = "realm" }

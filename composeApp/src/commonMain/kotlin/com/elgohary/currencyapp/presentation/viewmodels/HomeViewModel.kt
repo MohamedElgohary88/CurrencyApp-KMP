@@ -5,9 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.elgohary.currencyapp.data.model.Currency
 import com.elgohary.currencyapp.data.model.RateStatus
 import com.elgohary.currencyapp.data.remote.api.CurrencyApiService
 import com.elgohary.currencyapp.domain.repository.PreferencesRepository
+import com.elgohary.currencyapp.util.RequestState
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
@@ -21,6 +23,13 @@ class HomeViewModel(
 ) : ScreenModel {
     private var _rateStatus: MutableState<RateStatus> = mutableStateOf(RateStatus.Idle)
     val rateStatus: State<RateStatus> = _rateStatus
+
+    private var _sourceCurrency: MutableState<RequestState<Currency>> =
+        mutableStateOf(RequestState.Idle)
+    val sourceCurrency: State<RequestState<Currency>> = _sourceCurrency
+    private var _targetCurrency: MutableState<RequestState<Currency>> =
+        mutableStateOf(RequestState.Idle)
+    val targetCurrency: State<RequestState<Currency>> = _targetCurrency
 
     init {
         screenModelScope.launch {

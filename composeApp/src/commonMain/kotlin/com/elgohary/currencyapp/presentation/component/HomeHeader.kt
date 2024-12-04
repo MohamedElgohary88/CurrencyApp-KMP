@@ -23,8 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.elgohary.currencyapp.data.model.RateStatus
-import com.elgohary.currencyapp.ui.theme.headerColor
-import com.elgohary.currencyapp.ui.theme.staleColor
+import com.elgohary.currencyapp.presentation.theme.headerColor
+import com.elgohary.currencyapp.presentation.theme.staleColor
 import com.elgohary.currencyapp.util.displayCurrentDateTime
 import currencyapp.composeapp.generated.resources.Res
 import currencyapp.composeapp.generated.resources.exchange_illustration

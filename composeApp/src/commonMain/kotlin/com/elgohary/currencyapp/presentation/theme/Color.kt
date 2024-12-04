@@ -1,4 +1,4 @@
-package com.elgohary.currencyapp.ui.theme
+package com.elgohary.currencyapp.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable

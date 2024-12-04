@@ -1,8 +1,8 @@
 package com.elgohary.currencyapp.data.model
 
 import androidx.compose.ui.graphics.Color
-import com.elgohary.currencyapp.ui.theme.freshColor
-import com.elgohary.currencyapp.ui.theme.staleColor
+import com.elgohary.currencyapp.presentation.theme.freshColor
+import com.elgohary.currencyapp.presentation.theme.staleColor
 
 enum class RateStatus(
     val title: String,

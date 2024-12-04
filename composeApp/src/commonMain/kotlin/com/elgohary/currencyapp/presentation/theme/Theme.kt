@@ -1,4 +1,4 @@
-package com.elgohary.currencyapp.ui.theme
+package com.elgohary.currencyapp.presentation.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme

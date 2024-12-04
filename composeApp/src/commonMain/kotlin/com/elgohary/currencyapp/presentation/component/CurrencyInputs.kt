@@ -1,5 +1,7 @@
 package com.elgohary.currencyapp.presentation.component
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,14 +20,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.elgohary.currencyapp.data.model.Currency
 import com.elgohary.currencyapp.data.model.CurrencyCode
+import com.elgohary.currencyapp.util.DisplayResult
 import com.elgohary.currencyapp.util.RequestState
 import currencyapp.composeapp.generated.resources.Res
 import currencyapp.composeapp.generated.resources.switch_ic
@@ -38,6 +46,13 @@ fun CurrencyInputs(
     target: RequestState<Currency>,
     onSwitchClick: () -> Unit
 ) {
+
+    var animationStarted by remember { mutableStateOf(false) }
+    val animatedRotation by animateFloatAsState(
+        targetValue = if (animationStarted) 180f else 0f,
+        animationSpec = tween(durationMillis = 500)
+    )
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -49,8 +64,14 @@ fun CurrencyInputs(
         )
         Spacer(modifier = Modifier.width(14.dp))
         IconButton(
-            modifier = Modifier.padding(top = 24.dp),
-            onClick = onSwitchClick
+            modifier = Modifier.padding(top = 24.dp)
+                .graphicsLayer {
+                    rotationY = animatedRotation
+                },
+            onClick = {
+                animationStarted = !animationStarted
+                onSwitchClick()
+            }
         ) {
             Icon(
                 painter = painterResource(Res.drawable.switch_ic),
@@ -91,21 +112,23 @@ fun RowScope.CurrencyView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            if (currency.isSuccess()) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(CurrencyCode.valueOf(currency.getSuccessData().code).flag),
-                    tint = Color.Unspecified,
-                    contentDescription = "County Flag",
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = CurrencyCode.valueOf(currency.getSuccessData().code).name,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    color = Color.White
-                )
-            }
+            currency.DisplayResult(
+                onSuccess = { data ->
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(CurrencyCode.valueOf(data.code).flag),
+                        tint = Color.Unspecified,
+                        contentDescription = "County Flag",
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = CurrencyCode.valueOf(data.code).name,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                        color = Color.White
+                    )
+                }
+            )
         }
     }
 }

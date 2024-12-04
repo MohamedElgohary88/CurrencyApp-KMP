@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,11 +24,12 @@ fun AmountInput(
     amount: Double,
     onAmountChange: (Double) -> Unit
 ) {
-    TextField(
+    OutlinedTextField(
         modifier = Modifier.fillMaxWidth()
             .clip(RoundedCornerShape(size = 8.dp))
             .animateContentSize()
-            .height(54.dp),
+            .height(54.dp)
+            .animateContentSize(),
         value = "$amount",
         onValueChange = { onAmountChange(it.toDouble()) },
         label = { Text("Enter Amount") },

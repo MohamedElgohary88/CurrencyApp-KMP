@@ -3,6 +3,7 @@ package com.elgohary.currencyapp.data.remote
 import com.elgohary.currencyapp.data.model.ApiResponse
 import com.elgohary.currencyapp.data.model.Currency
 import com.elgohary.currencyapp.data.model.CurrencyCode
+import com.elgohary.currencyapp.data.model.toRealmObject
 import com.elgohary.currencyapp.data.remote.api.CurrencyApiService
 import com.elgohary.currencyapp.domain.repository.PreferencesRepository
 import com.elgohary.currencyapp.util.RequestState
@@ -55,7 +56,10 @@ class CurrencyApiServiceImpl(
 
                 // Filter supported currencies
                 val supportedCurrencies = CurrencyCode.entries.map { it.name }.toSet()
-                val availableCurrencies = apiResponse.data.values.filter { it.code in supportedCurrencies }
+                val availableCurrencyDtos = apiResponse.data.values.filter { it.code in supportedCurrencies }
+
+                // Map CurrencyDto to Currency (RealmObject)
+                val availableCurrencies = availableCurrencyDtos.map { it.toRealmObject() }
 
                 // Save the last updated time
                 preferences.saveLastUpdated(Instant.parse(apiResponse.meta.lastUpdatedAt))
@@ -68,4 +72,5 @@ class CurrencyApiServiceImpl(
             RequestState.Error("Failed to fetch exchange rates: ${e.message}")
         }
     }
+
 }

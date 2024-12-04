@@ -1,11 +1,14 @@
 package com.elgohary.currencyapp.data.local
 
+import com.elgohary.currencyapp.data.model.CurrencyCode
 import com.elgohary.currencyapp.domain.repository.PreferencesRepository
 import com.russhwolf.settings.ExperimentalSettingsApi
 import com.russhwolf.settings.ObservableSettings
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.coroutines.FlowSettings
 import com.russhwolf.settings.coroutines.toFlowSettings
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -20,6 +23,10 @@ class PreferencesRepositoryImpl(
     companion object {
         private const val TIME_STAMP_KEY = "lastUpdatedTime"
         private const val DEFAULT_TIMESTAMP = 0L // Avoid magic numbers
+        const val SOURCE_CURRENCY_KEY = "sourceCurrency"
+        const val TARGET_CURRENCY_KEY = "targetCurrency"
+        val DEFAULT_SOURCE_CURRENCY = CurrencyCode.USD.name
+        val DEFAULT_TARGET_CURRENCY = CurrencyCode.EGP.name
     }
 
     private val flowSettings: FlowSettings = (settings as ObservableSettings).toFlowSettings()
@@ -59,6 +66,34 @@ class PreferencesRepositoryImpl(
         val savedInstant = Instant.fromEpochMilliseconds(savedTimeStamp)
 
         return isSameDay(savedInstant, currentInstant)
+    }
+
+    override suspend fun saveSourceCurrencyCode(code: String) {
+        flowSettings.putString(
+            key = SOURCE_CURRENCY_KEY,
+            value = code
+        )
+    }
+
+    override suspend fun saveTargetCurrencyCode(code: String) {
+        flowSettings.putString(
+            key = TARGET_CURRENCY_KEY,
+            value = code
+        )
+    }
+
+    override fun readSourceCurrencyCode(): Flow<CurrencyCode> {
+        return flowSettings.getStringFlow(
+            key = SOURCE_CURRENCY_KEY,
+            defaultValue = DEFAULT_SOURCE_CURRENCY
+        ).map { CurrencyCode.valueOf(it) }
+    }
+
+    override fun readTargetCurrencyCode(): Flow<CurrencyCode> {
+        return flowSettings.getStringFlow(
+            key = TARGET_CURRENCY_KEY,
+            defaultValue = DEFAULT_TARGET_CURRENCY
+        ).map { CurrencyCode.valueOf(it) }
     }
 
     /**

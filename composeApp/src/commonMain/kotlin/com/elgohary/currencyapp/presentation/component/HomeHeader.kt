@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.elgohary.currencyapp.data.model.Currency
 import com.elgohary.currencyapp.data.model.RateStatus
 import com.elgohary.currencyapp.presentation.theme.headerColor
 import com.elgohary.currencyapp.presentation.theme.staleColor
+import com.elgohary.currencyapp.util.RequestState
 import com.elgohary.currencyapp.util.displayCurrentDateTime
 import currencyapp.composeapp.generated.resources.Res
 import currencyapp.composeapp.generated.resources.exchange_illustration
@@ -36,10 +38,14 @@ import org.jetbrains.compose.resources.painterResource
 fun HomeHeader(
     status: RateStatus,
     onRatesRefresh: () -> Unit,
-    modifier: Modifier = Modifier
+    source: RequestState<Currency>,
+    target: RequestState<Currency>,
+    onSwitchClick: () -> Unit,
+    amount: Double,
+    onAmountChange: (Double) -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             .background(headerColor)
@@ -50,6 +56,14 @@ fun HomeHeader(
             status = status,
             onRatesRefresh = onRatesRefresh
         )
+        Spacer(modifier = Modifier.height(24.dp))
+        CurrencyInputs(
+            source = source,
+            target = target,
+            onSwitchClick = onSwitchClick
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        AmountInput(amount = amount, onAmountChange = onAmountChange)
     }
 }
 

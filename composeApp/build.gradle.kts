@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.ktor.client.darwin)
         }
     }
+    task("testClasses"){}
 }
 
 android {

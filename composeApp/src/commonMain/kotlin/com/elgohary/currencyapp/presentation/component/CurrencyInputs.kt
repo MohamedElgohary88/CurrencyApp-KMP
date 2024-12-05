@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.elgohary.currencyapp.data.model.Currency
 import com.elgohary.currencyapp.data.model.CurrencyCode
+import com.elgohary.currencyapp.data.model.CurrencyType
 import com.elgohary.currencyapp.util.DisplayResult
 import com.elgohary.currencyapp.util.RequestState
 import currencyapp.composeapp.generated.resources.Res
@@ -44,7 +45,8 @@ import org.jetbrains.compose.resources.painterResource
 fun CurrencyInputs(
     source: RequestState<Currency>,
     target: RequestState<Currency>,
-    onSwitchClick: () -> Unit
+    onSwitchClick: () -> Unit,
+    onCurrencyTypeSelect: (CurrencyType) -> Unit
 ) {
 
     var animationStarted by remember { mutableStateOf(false) }
@@ -60,7 +62,17 @@ fun CurrencyInputs(
         CurrencyView(
             placeholder = "From",
             currency = source,
-            onClick = {}
+            onClick = {
+                if (source.isSuccess()) {
+                    onCurrencyTypeSelect(
+                        CurrencyType.Source(
+                            currencyCode = CurrencyCode.valueOf(
+                                source.getSuccessData().code
+                            )
+                        )
+                    )
+                }
+            }
         )
         Spacer(modifier = Modifier.width(14.dp))
         IconButton(
@@ -83,7 +95,17 @@ fun CurrencyInputs(
         CurrencyView(
             placeholder = "To",
             currency = target,
-            onClick = {}
+            onClick = {
+                if (target.isSuccess()) {
+                    onCurrencyTypeSelect(
+                        CurrencyType.Target(
+                            currencyCode = CurrencyCode.valueOf(
+                                target.getSuccessData().code
+                            )
+                        )
+                    )
+                }
+            }
         )
     }
 }

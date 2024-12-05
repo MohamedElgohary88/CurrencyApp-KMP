@@ -13,6 +13,7 @@ import com.elgohary.currencyapp.domain.repository.MongoRepository
 import com.elgohary.currencyapp.domain.repository.PreferencesRepository
 import com.elgohary.currencyapp.util.RequestState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,6 +22,8 @@ import kotlinx.datetime.Clock
 sealed class HomeUiEvent {
     data object RefreshRates : HomeUiEvent()
     data object SwitchCurrencies : HomeUiEvent()
+    data class SaveSourceCurrencyCode(val code: String) : HomeUiEvent()
+    data class SaveTargetCurrencyCode(val code: String) : HomeUiEvent()
 }
 
 class HomeViewModel(
@@ -61,6 +64,14 @@ class HomeViewModel(
             is HomeUiEvent.SwitchCurrencies -> {
                 switchCurrencies()
             }
+
+            is HomeUiEvent.SaveSourceCurrencyCode -> {
+                saveSourceCurrencyCode(event.code)
+            }
+
+            is HomeUiEvent.SaveTargetCurrencyCode -> {
+                saveTargetCurrencyCode(event.code)
+            }
         }
     }
 
@@ -69,6 +80,17 @@ class HomeViewModel(
         val target = _targetCurrency.value
         _sourceCurrency.value = target
         _targetCurrency.value = source
+    }
+
+    private fun saveSourceCurrencyCode(code: String) {
+        screenModelScope.launch(Dispatchers.IO) {
+            preferencesRepository.saveSourceCurrencyCode(code)
+        }
+    }
+    private fun saveTargetCurrencyCode(code: String) {
+        screenModelScope.launch(Dispatchers.IO) {
+            preferencesRepository.saveTargetCurrencyCode(code)
+        }
     }
 
     private suspend fun fetchNewRates() {

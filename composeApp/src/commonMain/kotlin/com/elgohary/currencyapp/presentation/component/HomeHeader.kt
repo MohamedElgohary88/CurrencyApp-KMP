@@ -23,7 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.elgohary.currencyapp.data.model.Currency
+import com.elgohary.currencyapp.data.model.CurrencyType
 import com.elgohary.currencyapp.data.model.RateStatus
+import com.elgohary.currencyapp.getPlatform
 import com.elgohary.currencyapp.presentation.theme.headerColor
 import com.elgohary.currencyapp.presentation.theme.staleColor
 import com.elgohary.currencyapp.util.RequestState
@@ -42,7 +44,8 @@ fun HomeHeader(
     target: RequestState<Currency>,
     onSwitchClick: () -> Unit,
     amount: Double,
-    onAmountChange: (Double) -> Unit
+    onAmountChange: (Double) -> Unit,
+    onCurrencyTypeSelect: (CurrencyType) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -50,6 +53,8 @@ fun HomeHeader(
             .clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             .background(headerColor)
             .padding(all = 24.dp)
+            .padding(top = if (getPlatform().name == "Android") 0.dp else 24.dp)
+
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         RateStatus(
@@ -60,7 +65,8 @@ fun HomeHeader(
         CurrencyInputs(
             source = source,
             target = target,
-            onSwitchClick = onSwitchClick
+            onSwitchClick = onSwitchClick,
+            onCurrencyTypeSelect = onCurrencyTypeSelect
         )
         Spacer(modifier = Modifier.height(24.dp))
         AmountInput(amount = amount, onAmountChange = onAmountChange)

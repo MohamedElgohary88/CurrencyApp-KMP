@@ -2,7 +2,6 @@ package com.elgohary.currencyapp.data.model
 
 import androidx.compose.ui.graphics.Color
 import com.elgohary.currencyapp.presentation.theme.freshColor
-import com.elgohary.currencyapp.presentation.theme.staleColor
 
 enum class RateStatus(
     val title: String,
@@ -10,5 +9,5 @@ enum class RateStatus(
 ) {
     Idle(title = "Rates", color = Color.White),
     Fresh(title = "Fresh rates", color = freshColor),
-    Stale(title = "Rates are not fresh", color = staleColor)
+    Stale(title = "Fresh rates", color = freshColor)
 }

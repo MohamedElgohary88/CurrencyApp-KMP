@@ -117,7 +117,6 @@ class HomeViewModel(
             } else if (localCache.isError()) {
                 println("HomeViewModel: ERROR READING LOCAL DATABASE ${localCache.getErrorData()}")
             }
-
             getRateStatus()
         } catch (e: Exception) {
             println(e.message)
